@@ -1,5 +1,3 @@
----
-
 # 📚 Contextual LLM Assistant
 
 A full-stack AI-powered application that allows users to **upload academic documents**, provide them with a **context name**, and then **ask questions** about the content. The backend processes documents using **Google Gemini's embedding model**, stores them in **Pinecone vector database**, and responds to queries using **semantic search** and **Gemini-Flash** for response generation.
@@ -128,7 +126,3 @@ node index.js
 ## 📢 Credits
 
 Built with 💙 using **Google Generative AI**, **Pinecone**, and **React**.
-
----
-
-Let me know if you'd like me to generate a `package.json`, deploy instructions, or a logo badge section!
