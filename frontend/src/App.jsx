@@ -175,7 +175,7 @@ export default function App() {
       <div className="sidebar">
         <div className="sidebar-header">
           <Book className="mr-2" size={20} />
-          <h2>GenAI Syllabus</h2>
+          <h2>Contextual LLM</h2>
         </div>
         
         <button 
@@ -325,7 +325,7 @@ export default function App() {
                   <Book size={24} />
                 </div>
                 <div className="message-content">
-                  <p>I'm your GenAI Syllabus Assistant. Ask me questions about your uploaded documents!</p>
+                  <p>I'm your Contextual LLM Assistant. Ask me questions about your uploaded documents!</p>
                 </div>
               </div>
               
