@@ -76,7 +76,7 @@ export default function App() {
         });
       }, 500);
 
-      await axios.post('http://localhost:5000/upload', formData);
+      await axios.post('https://contextual-llm.onrender.com/upload', formData);
       
       clearInterval(progressInterval);
       setUploadProgress(100);
@@ -109,7 +109,7 @@ export default function App() {
     setUserQuestion('');
     
     try {
-      const response = await axios.post('http://localhost:5000/ask', {
+      const response = await axios.post('https://contextual-llm.onrender.com/ask', {
         contextName,
         question,
       });
