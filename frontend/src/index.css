@@ -44,6 +44,12 @@ body {
   height: 100vh;
   overflow: hidden;
 }
+.logo {
+  width: 60px; /* Adjust size as needed */
+  height: auto;
+  margin-right: 10px; /* Space between logo and text */
+}
+
 
 /* Mobile menu & sidebar overlay styles */
 .mobile-sidebar-toggle {
@@ -81,7 +87,7 @@ body {
 
 /* Sidebar */
 .sidebar {
-  width: 260px;
+  width: 300px;
   background-color: var(--color-sidebar);
   display: flex;
   flex-direction: column;

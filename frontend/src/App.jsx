@@ -212,10 +212,11 @@ export default function App() {
       
       {/* Sidebar - add expanded class on mobile */}
       <div className={`sidebar ${sidebarExpanded ? 'expanded' : ''}`}>
-        <div className="sidebar-header">
-          <Book className="mr-2" size={20} />
-          <h2>Contextual LLM</h2>
-        </div>
+  <div className="sidebar-header">
+    <img src="../logo.png" alt="Contextual LLM Logo" className="logo" />
+    <h2>Contextual LLM</h2>
+  </div>
+
         
         <button 
           className={`new-chat-btn ${step === 1 ? 'active' : ''}`}
