@@ -42,7 +42,7 @@ const extractText = async (file) => {
   return '';
 };
 
-// --- /upload Endpoint ---
+// upload Endpoint 
 app.post('/upload', async (req, res) => {
   try {
     const contextName = req.body.contextName;
@@ -89,8 +89,7 @@ app.post('/upload', async (req, res) => {
   }
 });
 
-// --- /ask Endpoint ---
-// --- /ask Endpoint ---
+// ask Endpoint 
 app.post('/ask', async (req, res) => {
   try {
     const { question, contextName } = req.body;
@@ -98,7 +97,7 @@ app.post('/ask', async (req, res) => {
     // Step 1: Get Embedding for Question
     const embeddingModel = genAI.getGenerativeModel({ model: "models/embedding-001" });
     const embedResponse = await embeddingModel.embedContent({
-      content: { parts: [{ text: question }] }, // Changed this line
+      content: { parts: [{ text: question }] }, 
       taskType: "retrieval_query",
     });
 
@@ -131,4 +130,4 @@ app.post('/ask', async (req, res) => {
   }
 });
 
-app.listen(PORT, () => console.log(`✅ Server running on http://localhost:${PORT}`));
+app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

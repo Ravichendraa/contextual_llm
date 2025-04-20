@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import { FileUp, Send, Book, CheckCircle, Loader2, HelpCircle, Upload, ArrowRight, Trash, Copy, CheckCheck } from 'lucide-react';
+import { FileUp, Send, Book, CheckCircle, Loader2, HelpCircle, Upload, ArrowRight, Trash, Copy, CheckCheck, Menu, X } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 
 export default function App() {
-  // State variables
+  // Existing state variables
   const [files, setFiles] = useState(null);
   const [contextName, setContextName] = useState('');
   const [userQuestion, setUserQuestion] = useState('');
@@ -16,11 +16,16 @@ export default function App() {
   const [error, setError] = useState('');
   const [conversations, setConversations] = useState([]);
   const [loadingDots, setLoadingDots] = useState(1);
-  const [currentQuestion, setCurrentQuestion] = useState(''); // Store the current question being answered
-  const [copiedIndex, setCopiedIndex] = useState(null); // Track which response was copied
+  const [currentQuestion, setCurrentQuestion] = useState('');
+  const [copiedIndex, setCopiedIndex] = useState(null);
+  
+  // New state for responsive sidebar
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  
   const messagesEndRef = useRef(null);
+  const textareaRef = useRef(null);
 
-  // Dynamic loading animation
+  // Existing useEffects...
   useEffect(() => {
     let interval;
     if (isLoading) {
@@ -31,12 +36,10 @@ export default function App() {
     return () => clearInterval(interval);
   }, [isLoading]);
 
-  // Auto scroll to bottom of messages
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [conversations, isLoading, currentQuestion]);
 
-  // Reset the copied state after 2 seconds
   useEffect(() => {
     if (copiedIndex !== null) {
       const timer = setTimeout(() => {
@@ -46,6 +49,25 @@ export default function App() {
     }
   }, [copiedIndex]);
 
+  // New useEffect for handling resize events
+  useEffect(() => {
+    const handleResize = () => {
+      // Auto-collapse sidebar on smaller screens when moving between breakpoints
+      if (window.innerWidth <= 768) {
+        setSidebarExpanded(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Function to toggle sidebar on mobile
+  const toggleSidebar = () => {
+    setSidebarExpanded(!sidebarExpanded);
+  };
+
+  // Existing functions...
   const handleFileUpload = async () => {
     if (!files || files.length === 0 || !contextName.trim()) {
       setError('Please select files and enter a context name');
@@ -122,6 +144,11 @@ export default function App() {
       setConversations([...conversations, newConversation]);
       setAnswer(response.data.answer);
       setCurrentQuestion(''); // Clear the current question after adding to conversations
+      
+      // On mobile, auto-collapse sidebar after asking a question
+      if (window.innerWidth <= 768) {
+        setSidebarExpanded(false);
+      }
     } catch (error) {
       setError('Failed to get answer. Please try again.');
     } finally {
@@ -139,13 +166,13 @@ export default function App() {
     setUploadProgress(0);
     setConversations([]);
     setCurrentQuestion('');
+    
+    // On mobile, auto-collapse sidebar after resetting
+    if (window.innerWidth <= 768) {
+      setSidebarExpanded(false);
+    }
   };
 
-  const renderLoadingDots = () => {
-    return '.'.repeat(loadingDots);
-  };
-
-  // Function to copy text to clipboard
   const copyToClipboard = (text, index) => {
     navigator.clipboard.writeText(text).then(() => {
       setCopiedIndex(index);
@@ -153,9 +180,6 @@ export default function App() {
       console.error('Failed to copy text: ', err);
     });
   };
-
-  // Auto-resize textarea
-  const textareaRef = useRef(null);
   
   const resizeTextarea = () => {
     const textarea = textareaRef.current;
@@ -169,10 +193,25 @@ export default function App() {
     resizeTextarea();
   }, [userQuestion]);
 
+  const renderLoadingDots = () => {
+    return '.'.repeat(loadingDots);
+  };
+
   return (
     <div className="app-container">
-      {/* Sidebar */}
-      <div className="sidebar">
+      {/* Mobile sidebar toggle button - only visible on mobile */}
+      <div className="mobile-sidebar-toggle">
+        <button 
+          onClick={toggleSidebar} 
+          className="menu-button"
+          aria-label={sidebarExpanded ? "Close sidebar" : "Open sidebar"}
+        >
+          {sidebarExpanded ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      </div>
+      
+      {/* Sidebar - add expanded class on mobile */}
+      <div className={`sidebar ${sidebarExpanded ? 'expanded' : ''}`}>
         <div className="sidebar-header">
           <Book className="mr-2" size={20} />
           <h2>Contextual LLM</h2>
@@ -412,6 +451,11 @@ export default function App() {
           </div>
         )}
       </div>
+      
+      {/* Mobile overlay when sidebar is expanded */}
+      {sidebarExpanded && (
+        <div className="sidebar-overlay" onClick={() => setSidebarExpanded(false)}></div>
+      )}
     </div>
   );
 }
